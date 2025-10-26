@@ -19,12 +19,12 @@ Foco em dispositivos móveis (mobile-first), armazenamento local (sem backend/nu
   - RF02.4: O usuário deve ser capaz de excluir uma lista de tarefas inteira, incluindo todas as tarefas contidas nela. O sistema deve solicitar confirmação.
 - **RF03: Gerenciamento de Tarefas (Itens dentro de uma Lista)**
   - RF03.1: Dentro de uma lista de tarefas selecionada, o usuário deve ser capaz de adicionar novas tarefas (itens).
-  - RF 03.2: O usuário deve ser capaz de marcar uma tarefa como "concluída".
-  - RF 03.3: Tarefas concluídas devem ser visualmente diferenciadas (ex: riscadas, com cor de fundo diferente).
-  - RF 03.4: O usuário deve ser capaz de desmarcar uma tarefa "concluída", retornando-a ao estado "pendente".
-  - RF 03.5: O usuário deve ser capaz de editar o texto de uma tarefa existente.
-  - RF 03.6: O usuário deve ser capaz de excluir uma tarefa individual de uma lista.
-  - RF 03.7: O usuário deve ser capaz de reordenar as tarefas dentro de uma lista (ex: arrastando e soltando).
+  - RF03.2: O usuário deve ser capaz de marcar uma tarefa como "concluída".
+  - RF03.3: Tarefas concluídas devem ser visualmente diferenciadas (ex: riscadas, com cor de fundo diferente).
+  - RF03.4: O usuário deve ser capaz de desmarcar uma tarefa "concluída", retornando-a ao estado "pendente".
+  - RF03.5: O usuário deve ser capaz de editar o texto de uma tarefa existente.
+  - RF03.6: O usuário deve ser capaz de excluir uma tarefa individual de uma lista.
+  - RF03.7: O usuário deve ser capaz de reordenar as tarefas dentro de uma lista (ex: arrastando e soltando).
 
 ## Requisitos Não Funcionais
 
@@ -51,3 +51,4 @@ Foco em dispositivos móveis (mobile-first), armazenamento local (sem backend/nu
   - RNF06.1 (Instalável): O aplicativo deve fornecer um arquivo manifest.json (Web App Manifest) válido, permitindo que seja "instalado" (adicionado à tela inicial) em dispositivos compatíveis, com ícone, nome e modo de exibição "standalone".
   - RNF06.2 (Capacidade Offline): O aplicativo deve registrar um Service Worker para armazenar em cache os principais arquivos da aplicação (HTML, CSS, JS, ícones). Isso garante que o aplicativo possa ser iniciado e utilizado mesmo sem conexão com a internet.
   - RNF06.3 (Segurança): O aplicativo deve ser servido obrigatoriamente via HTTPS, pois é um pré-requisito para o funcionamento de Service Workers.
+
