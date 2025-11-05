@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memento - Visualizar Anotação</title>
+    <script src="js/view.js" defer="defer"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Visualizar Anotação</h1>
+      <a href="index.html" aria-label="Voltar">
+        <svg width="24" height="24" aria-hidden="true">
+          <use href="icons.svg#icon-arrow-back"></use>
+        </svg>
+      </a>
+      <button id="delete-button" type="button" aria-label="Excluir anotação">
+        <svg width="24" height="24" aria-hidden="true">
+          <use href="icons.svg#icon-delete"></use>
+        </svg>
+      </button>
+    </header>
+    <main>
+      <form id="note-form">
+        <div>
+          <label for="note-title">Título</label>
+          <input id="note-title" type="text" name="title" />
+        </div>
+        <div>
+          <label for="note-content" name="content">Conteúdo</label>
+          <textarea id="note-content"></textarea>
+        </div>
+        <div>
+          <button type="button" aria-controls="reminder-dialog" aria-expanded="false" aria-labelledby="reminder-action reminder-status">
+            <svg width="24" height="24" aria-hidden="true">
+              <use href="icons.svg#icon-alarm"></use>
+            </svg>
+            <span id="reminder-action">Definir lembrete. Atualmente: </span>
+            <span id="reminder-status">Sem lembrete.</span>
+          </button>
+          <input type="hidden" name="reminder-datetime" value="" />
+          <input type="hidden" name="reminder-repetition" value="" />
+        </div>
+        <button type="submit" aria-label="Salvar anotação">
+          <svg width="24" height="24" aria-hidden="true">
+            <use href="icons.svg#icon-check"></use>
+          </svg>
+        </button>
+      </form>
+    </main>
+    <div id="reminder-dialog" role="dialog" aria-modal="true" aria-labelledby="reminder-dialog-title">
+      <h2 id="reminder-dialog-title">Definir Lembrete</h2>
+      <form>
+        <div>
+          <label for="reminder-datetime">Data e hora:</label>
+          <input id="reminder-datetime" type="datetime-local" name="reminder-datetime" />
+        </div>
+        <div>
+          <label for="reminder-repetition">Repetição:</label>
+          <select id="reminder-repetition" name="reminder-repetition">
+            <option value="none">Sem repetição</option>
+            <option value="daily">Diária</option>
+            <option value="weekly">Semanal</option>
+            <option value="monthly">Mensal</option>
+            <option value="yearly">Anual</option>
+          </select>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

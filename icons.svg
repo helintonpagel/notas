@@ -2,10 +2,16 @@
   <symbol id="icon-menu" viewBox="0 -960 960 960">
     <path fill="currentColor" d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
   </symbol>
-  <symbol id="icon-home" viewBox="0 -960 960 960">
-    <path fill="currentColor" d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
+  <symbol id="icon-search" viewBox="0 -960 960 960">
+    <path fill="currentColor" d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
   </symbol>
-  <symbol id="icon-notes" viewBox="0 -960 960 960">
+  <symbol id="icon-sort" viewBox="0 -960 960 960">
+    <path fill="currentColor" d="M120-240v-80h240v80H120Zm0-200v-80h480v80H120Zm0-200v-80h720v80H120Z" />
+  </symbol>
+  <symbol id="icon-close" viewBox="0 -960 960 960">
+    <path fill="currentColor" d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+  </symbol>
+  <symbol id="icon-note-stack" viewBox="0 -960 960 960">
     <path fill="currentColor" d="M280-160v-441q0-33 24-56t57-23h439q33 0 56.5 23.5T880-600v320L680-80H360q-33 0-56.5-23.5T280-160ZM81-710q-6-33 13-59.5t52-32.5l434-77q33-6 59.5 13t32.5 52l10 54h-82l-7-40-433 77 40 226v279q-16-9-27.5-24T158-276L81-710Zm279 110v440h280v-160h160v-280H360Zm220 220Z" />
   </symbol>
   <symbol id="icon-star" viewBox="0 -960 960 960">
@@ -14,10 +20,10 @@
   <symbol id="icon-alarm" viewBox="0 -960 960 960">
     <path fill="currentColor" d="M480-80q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-440q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-800q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-440q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-80Zm0-360Zm112 168 56-56-128-128v-184h-80v216l152 152ZM224-866l56 56-170 170-56-56 170-170Zm512 0 170 170-56 56-170-170 56-56ZM480-160q117 0 198.5-81.5T760-440q0-117-81.5-198.5T480-720q-117 0-198.5 81.5T200-440q0 117 81.5 198.5T480-160Z" />
   </symbol>
-  <symbol id="icon-bookmark" viewBox="0 -960 960 960">
-    <path fill="currentColor" d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" />
+  <symbol id="icon-label" viewBox="0 -960 960 960">
+    <path fill="currentColor" d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h440q19 0 36 8.5t28 23.5l216 288-216 288q-11 15-28 23.5t-36 8.5H160Zm0-80h440l180-240-180-240H160v480Zm220-240Z" />
   </symbol>
-  <symbol id="icon-trash" viewBox="0 -960 960 960">
+  <symbol id="icon-delete" viewBox="0 -960 960 960">
     <path fill="currentColor" d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
   </symbol>
   <symbol id="icon-settings" viewBox="0 -960 960 960">
@@ -26,13 +32,11 @@
   <symbol id="icon-add" viewBox="0 -960 960 960">
     <path fill="currentColor" d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
   </symbol>
-  <symbol id="icon-search" viewBox="0 -960 960 960">
-    <path fill="currentColor" d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
-  </symbol>
-  <symbol id="icon-sort" viewBox="0 -960 960 960">
-    <path fill="currentColor" d="M120-240v-80h240v80H120Zm0-200v-80h480v80H120Zm0-200v-80h720v80H120Z" />
-  </symbol>
-  <symbol id="icon-check" viewBox="0 -960 960 960">
+  <svg id="icon-arrow-back" viewBox="0 -960 960 960">
+    <path fill="currentColor" d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+  </svg>
+  <svg id="icon-check" viewBox="0 -960 960 960">
     <path fill="currentColor" d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-  </symbol>
+  </svg>
+  
 </svg>

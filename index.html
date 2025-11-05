@@ -3,125 +3,148 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anotações</title>
+    <title>Memento - Anotações</title>
+    <script src="js/index.js" defer="defer"></script>
   </head>
   <body>
     <header>
       <h1>Anotações</h1>
-      <button type="button" aria-controls="menu-sidebar" aria-expanded="false" aria-label="Menu principal">
-        <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-menu"></use></svg>
+      <button type="button" aria-controls="main-sidebar" aria-expanded="false" aria-label="Menu principal">
+        <svg width="24" height="24" aria-hidden="true">
+          <use href="icons.svg#icon-menu"></use>
+        </svg>
       </button>
-      <nav id="menu-sidebar">
-        <ul>
-          <li>
-            <a href="#">
-              <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-notes"></use></svg>
-              Anotações
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-star"></use></svg>
-              Favoritos
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-alarm"></use></svg>
-              Lembretes
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-bookmark"></use></svg>
-              Etiquetas
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-trash"></use></svg>
-              Excluídos
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-settings"></use></svg>
-              Configurações
-            </a>
-          </li>
-        </ul>
-      </nav>
       <div role="toolbar" aria-label="Ações principais">
-        <button type="button" aria-controls="search-box" aria-expanded="false" aria-label="Caixa de busca">
-          <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-search"></use></svg>
+        <button type="button" aria-controls="search-box" aria-expanded="false" aria-label="Pesquisar">
+          <svg width="24" height="24" aria-hidden="true">
+            <use href="icons.svg#icon-search"></use>
+          </svg>
         </button>
-        <button type="button" aria-controls="sort-popup" aria-expanded="false" aria-label="Menu de ordenação">
-          <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-sort"></use></svg>
+        <button type="button" aria-controls="sort-dialog" aria-expanded="false" aria-label="Organizar">
+          <svg width="24" height="24" aria-hidden="true">
+            <use href="icons.svg#icon-sort"></use>
+          </svg>
         </button>
       </div>
-      <form id="search-box" role="search">
-        <label for="search-input">Buscar</label>
-        <input id="search-input" type="search" placeholder="Buscar título ou conteúdo..." />
-      </form>
-      <section id="sort-popup">
-        <h2>Ordenar Anotações</h2>
-        <form>
-          <fieldset>
-            <legend>Opções de ordem</legend>
-            <div>
-              <input id="sort-change-date" type="radio" name="sort" value="create-date" />
-              <label for="sort-change-date">Data de modificação</label>
-            </div>
-            <div>
-              <input id="sort-create-date" type="radio" name="sort" value="change-date" />
-              <label for="sort-create-date">Data de criação</label>
-            </div>
-            <div>
-              <input id="sort-reminder-date" type="radio" name="sort" value="reminder-date" />
-              <label for="sort-reminder-date">Data de lembrete</label>
-            </div>
-            <div>
-              <input id="sort-alphabet" type="radio" name="sort" value="alphabet" checked="checked" />
-              <label for="sort-alphabet">Alfabeto</label>
-            </div>
-          </fieldset>
-          <div>
-            <input id="sort-favorites" type="checkbox" name="sort-favorites" />
-            <label for="sort-favorites">Favoritos primeiro</label>
-          </div>
-          <fieldset>
-            <legend>Sentido da ordem</legend>
-            <div>
-              <input id="sort-asc" type="radio" name="order" value="asc" checked="checked" />
-              <label for="sort-asc">Crescente</label>
-            </div>
-            <div>
-              <input id="sort-desc" type="radio" name="order" value="desc" />
-              <label for="sort-desc">Decrescente</label>
-            </div>
-          </fieldset>
+      <div id="search-box"> <!-- hidden -->
+        <form role="search">
+          <label for="search">Pesquisar</label>
+          <input id="search" type="search" placeholder="Digite para pesquisar..." aria-controls="notes-list" />
         </form>
-      </section>
+        <button type="button" aria-label="Fechar pesquisa">
+          <svg width="24" height="24" aria-hidden="true">
+            <use href="icons.svg#icon-close"></use>
+          </svg>
+        </button>
+      </div>
     </header>
-    <main>
-      <h2>Minhas Anotações</h2>
-      <a href="#" aria-label="Criar anotação">
-        <svg width="24" height="24" aria-hidden="true"><use href="icons.svg#icon-add"></use></svg>
-      </a>
+    <nav id="main-sidebar"> <!-- hidden -->
+      <a href="#">Memento</a>
       <ul>
         <li>
-          <h3>
-            <a href="#">Uma Anotação Comprida</a>
-          </h3>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia odit illo nesciunt. Error blanditiis, corporis deserunt consectetur quam, rerum quaerat maiores culpa temporibus...</p>
+          <a href="#">
+            <svg width="24" height="24" aria-hidden="true">
+              <use href="icons.svg#icon-note-stack"></use>
+            </svg>
+            Anotações
+          </a>
         </li>
         <li>
-          <h3>
-            <a href="#">Outra Anotação</a>
-          </h3>
-          <p>Excepturi mollitia? Reiciendis porro ducimus aperiam tempore?</p>
+          <a href="#">
+            <svg width="24" height="24" aria-hidden="true">
+              <use href="icons.svg#icon-star"></use>
+            </svg>
+            Favoritos
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg width="24" height="24" aria-hidden="true">
+              <use href="icons.svg#icon-alarm"></use>
+            </svg>
+            Lembretes
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg width="24" height="24" aria-hidden="true">
+              <use href="icons.svg#icon-label"></use>
+            </svg>
+            Etiquetas
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg width="24" height="24" aria-hidden="true">
+              <use href="icons.svg#icon-delete"></use>
+            </svg>
+            Excluídos
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg width="24" height="24" aria-hidden="true">
+              <use href="icons.svg#icon-settings"></use>
+            </svg>
+            Configurações
+          </a>
         </li>
       </ul>
+    </nav>
+    <main>
+      <ul id="notes-list" aria-live="polite"></ul>
+      <template id="note-template">
+        <li>
+          <a>
+            <h3></h3>
+            <p></p>
+          </a>
+        </li>
+      </template>
+      <a href="add.html" aria-label="Adicionar anotação">
+        <svg width="24" height="24" aria-hidden="true">
+          <use href="icons.svg#icon-add"></use>
+        </svg>
+      </a>
     </main>
+    <div id="sort-dialog" role="dialog" aria-modal="true" aria-labelledby="sort-dialog-title"> <!-- hidden -->
+      <h2 id="sort-dialog-title">Organizar Anotações</h2>
+      <form>
+        <fieldset>
+          <legend>Organizar por:</legend>
+          <div>
+            <input id="sort-modified-date" type="radio" name="sort" value="modified-date" checked="checked" />
+            <label for="sort-modified-date">Data de modificação</label>
+          </div>
+          <div>
+            <input id="sort-created-date" type="radio" name="sort" value="created-date" />
+            <label for="sort-created-date">Data de criação</label>
+          </div>
+          <div>
+            <input id="sort-reminder-date" type="radio" name="sort" value="reminder-date" />
+            <label for="sort-reminder-date">Data de lembrete</label>
+          </div>
+          <div>
+            <input id="sort-title" type="radio" name="sort" value="title" />
+            <label for="sort-title">Título</label>
+          </div>
+        </fieldset>
+        <div>
+          <input id="sort-favorites" type="checkbox" name="favorites" />
+          <label for="sort-favorites">Favoritos primeiro</label>
+        </div>
+        <fieldset>
+          <legend>Sentido</legend>
+          <div>
+            <input id="sort-ascending" type="radio" name="sort-order" value="ascending" checked="checked" />
+            <label for="sort-ascending">Crescente</label>
+          </div>
+          <div>
+            <input id="sort-descending" type="radio" name="sort-order" value="descending" />
+            <label for="sort-descending">Decrescente</label>
+          </div>
+        </fieldset>
+      </form>
+    </div>
   </body>
 </html>
