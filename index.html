@@ -4,29 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memento - Anotações</title>
+    <link rel="stylesheet" href="css/styles.css" />
     <script src="js/index.js" defer="defer"></script>
   </head>
   <body>
-    <header>
+    <header class="header">
       <h1>Anotações</h1>
-      <button type="button" aria-controls="main-sidebar" aria-expanded="false" aria-label="Menu principal">
+      <button class="button" type="button" aria-controls="main-sidebar" aria-expanded="false" aria-label="Menu principal">
         <svg width="24" height="24" aria-hidden="true">
           <use href="icons.svg#icon-menu"></use>
         </svg>
       </button>
-      <div role="toolbar" aria-label="Ações principais">
-        <button type="button" aria-controls="search-box" aria-expanded="false" aria-label="Pesquisar">
+      <div class="toolbar" role="toolbar" aria-label="Ações principais">
+        <button class="button" type="button" aria-controls="search-box" aria-expanded="false" aria-label="Pesquisar">
           <svg width="24" height="24" aria-hidden="true">
             <use href="icons.svg#icon-search"></use>
           </svg>
         </button>
-        <button type="button" aria-controls="sort-dialog" aria-expanded="false" aria-label="Organizar">
+        <button class="button" type="button" aria-controls="sort-dialog" aria-expanded="false" aria-label="Organizar">
           <svg width="24" height="24" aria-hidden="true">
             <use href="icons.svg#icon-sort"></use>
           </svg>
         </button>
       </div>
-      <div id="search-box"> <!-- hidden -->
+      <div id="search-box" hidden="hidden">
         <form role="search">
           <label for="search">Pesquisar</label>
           <input id="search" type="search" placeholder="Digite para pesquisar..." aria-controls="notes-list" />
@@ -38,7 +39,7 @@
         </button>
       </div>
     </header>
-    <nav id="main-sidebar"> <!-- hidden -->
+    <nav id="main-sidebar" hidden="hidden">
       <a href="#">Memento</a>
       <ul>
         <li>
@@ -92,22 +93,22 @@
       </ul>
     </nav>
     <main>
-      <ul id="notes-list" aria-live="polite"></ul>
+      <ul class="notes" id="notes-list" aria-live="polite"></ul>
       <template id="note-template">
-        <li>
-          <a>
-            <h3></h3>
-            <p></p>
+        <li class="note-card">
+          <a class="note-card__link">
+            <h3 class="note-card__title"></h3>
+            <p class="note-card__content"></p>
           </a>
         </li>
       </template>
-      <a href="add.html" aria-label="Adicionar anotação">
+      <a class="fixed-button" href="add.html" aria-label="Adicionar anotação">
         <svg width="24" height="24" aria-hidden="true">
           <use href="icons.svg#icon-add"></use>
         </svg>
       </a>
     </main>
-    <div id="sort-dialog" role="dialog" aria-modal="true" aria-labelledby="sort-dialog-title"> <!-- hidden -->
+    <div id="sort-dialog" role="dialog" aria-modal="true" aria-labelledby="sort-dialog-title" hidden="hidden">
       <h2 id="sort-dialog-title">Organizar Anotações</h2>
       <form>
         <fieldset>

@@ -4,12 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memento - Adicionar Anotação</title>
+    <link rel="stylesheet" href="css/styles.css" />
     <script src="js/add.js" defer></script>
   </head>
   <body>
-    <header>
+    <header class="header">
       <h1>Adicionar Anotação</h1>
-      <a href="index.html" aria-label="Voltar">
+      <a class="button" href="index.html" aria-label="Voltar">
         <svg width="24" height="24" aria-hidden="true">
           <use href="icons.svg#icon-arrow-back"></use>
         </svg>
@@ -26,7 +27,7 @@
           <textarea id="note-content"></textarea>
         </div>
         <div>
-          <button type="button" aria-controls="reminder-dialog" aria-expanded="false" aria-labelledby="reminder-action reminder-status">
+          <button class="button button-reminder" type="button" aria-controls="reminder-dialog" aria-expanded="false" aria-labelledby="reminder-action reminder-status">
             <svg width="24" height="24" aria-hidden="true">
               <use href="icons.svg#icon-alarm"></use>
             </svg>
@@ -36,14 +37,14 @@
           <input type="hidden" name="reminder-datetime" value="" />
           <input type="hidden" name="reminder-repetition" value="" />
         </div>
-        <button type="submit" aria-label="Salvar anotação">
+        <button class="button fixed-button" type="submit" aria-label="Salvar anotação">
           <svg width="24" height="24" aria-hidden="true">
             <use href="icons.svg#icon-check"></use>
           </svg>
         </button>
       </form>
     </main>
-    <div id="reminder-dialog" role="dialog" aria-modal="true" aria-labelledby="reminder-dialog-title">
+    <div id="reminder-dialog" role="dialog" aria-modal="true" aria-labelledby="reminder-dialog-title" hidden="hidden">
       <h2 id="reminder-dialog-title">Definir Lembrete</h2>
       <form>
         <div>
