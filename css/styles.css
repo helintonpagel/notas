@@ -148,6 +148,11 @@ body {
   width: 100%;
 }
 
+#note-form textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
 #note-form label {
   display: block;
   margin-top: 1.5rem;
