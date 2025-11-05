@@ -7,7 +7,7 @@ function getNoteFromId(id) {
 }
 
 function populateNoteForm(note) {
-  if (!note) alert("Anotação não encontrada!") || window.location.replace("index.html");
+  if (!note) alert("Anotação não encontrada!") || (window.location.href = "index.html");
 
   noteForm.elements["note-title"].value = note.title;
   noteForm.elements["note-content"].value = note.content;
@@ -21,24 +21,24 @@ noteForm.addEventListener("submit", (event) => {
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
   const noteIndex = notes.findIndex((note) => note.id === new URLSearchParams(window.location.search).get("id"));
 
-  if (noteIndex === -1) alert("Anotação não encontrada!") || window.location.href("index.html");
+  if (noteIndex === -1) alert("Anotação não encontrada!") || (window.location.href = "index.html");
 
   notes[noteIndex].title = noteForm.elements["note-title"].value;
   notes[noteIndex].content = noteForm.elements["note-content"].value;
   notes[noteIndex].updatedAt = new Date().toISOString();
 
   localStorage.setItem("notes", JSON.stringify(notes));
-  window.location.href("index.html");
+  window.location.href = "index.html";
 });
 
 deleteButton.addEventListener("click", () => {
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
   const noteIndex = notes.findIndex((note) => note.id === new URLSearchParams(window.location.search).get("id"));
 
-  if (noteIndex === -1) alert("Anotação não encontrada!") || window.location.href("index.html");
+  if (noteIndex === -1) alert("Anotação não encontrada!") || (window.location.href = "index.html");
   if (!confirm("Tem certeza que deseja deletar esta anotação?")) return;
 
   notes.splice(noteIndex, 1);
   localStorage.setItem("notes", JSON.stringify(notes));
-  window.location.href("index.html");
+  window.location.href = "index.html";
 });
