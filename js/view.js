@@ -40,5 +40,5 @@ deleteButton.addEventListener("click", () => {
 
   notes.splice(noteIndex, 1);
   localStorage.setItem("notes", JSON.stringify(notes));
-  window.location.replace("index.html");
+  window.location.href("index.html");
 });
