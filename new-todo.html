@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nova Lista - Memento</title>
+    <style>
+      /* =========================================
+         1. Variáveis & Base (Consistente)
+         ========================================= */
+      :root {
+        --color-primary: #6200ee;
+        --color-bg-app: #ffffff;
+        --color-bg-surface: #ffffff;
+        --color-text-primary: #202124;
+        --color-text-secondary: #5f6368;
+        --color-text-placeholder: #9aa0a6;
+        --color-border: #dadce0;
+        --font-family: "Roboto", sans-serif;
+        --header-height: 64px;
+        --shadow-elevation-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        --shadow-elevation-4: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-family);
+        background-color: var(--color-bg-app);
+        color: var(--color-text-primary);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* =========================================
+         2. Header (.top-bar)
+         ========================================= */
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        height: var(--header-height);
+        padding: 0 8px;
+        background-color: var(--color-bg-surface);
+        flex-shrink: 0;
+      }
+
+      .top-bar__start {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .top-bar__title {
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: var(--color-text-primary);
+        margin-left: 8px;
+      }
+
+      .icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: none;
+        background-color: transparent;
+        color: var(--color-text-secondary);
+        border-radius: 50%;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.2s;
+      }
+      .icon-btn:hover {
+        background-color: rgba(60, 64, 67, 0.08);
+        color: var(--color-text-primary);
+      }
+      .icon-btn svg {
+        fill: currentColor;
+      }
+
+      /* =========================================
+         3. Editor (.note-editor)
+         ========================================= */
+      main {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        max-width: 800px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 16px 24px;
+        overflow-y: auto; /* Permite scroll se a lista for longa */
+      }
+
+      .note-editor {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding-bottom: 80px; /* Espaço para o FAB */
+      }
+
+      .note-editor__input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        outline: none;
+        color: var(--color-text-primary);
+        font-family: inherit;
+      }
+
+      .note-editor__input::placeholder {
+        color: var(--color-text-placeholder);
+      }
+
+      .note-editor__title {
+        font-size: 1.5rem;
+        font-weight: 500;
+        line-height: 1.2;
+        padding: 8px 0;
+      }
+
+      /* =========================================
+         4. Lista de Tarefas (Todo List Styles)
+         ========================================= */
+      .todo-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .todo-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 4px 0;
+        /* Animação suave ao adicionar/remover */
+        transition: opacity 0.2s;
+      }
+
+      /* Checkbox Customizado (Simples) */
+      .todo-item__checkbox {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--color-text-secondary); /* Cor do check nativo */
+      }
+
+      /* Quando checado, o texto fica riscado */
+      .todo-item__checkbox:checked + .todo-item__input {
+        text-decoration: line-through;
+        color: var(--color-text-secondary);
+      }
+
+      .todo-item__input {
+        flex-grow: 1;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        color: var(--color-text-primary);
+        background: transparent;
+        padding: 4px 0;
+      }
+      .todo-item__input::placeholder {
+        color: var(--color-text-placeholder);
+      }
+
+      /* Botão de remover item (X) */
+      .todo-item__remove {
+        background: transparent;
+        border: none;
+        color: var(--color-text-placeholder);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0; /* Invisível por padrão no desktop */
+        transition: opacity 0.2s, background 0.2s;
+      }
+
+      .todo-item:hover .todo-item__remove,
+      .todo-item__input:focus ~ .todo-item__remove {
+        opacity: 1; /* Visível no hover ou foco */
+      }
+
+      .todo-item__remove:hover {
+        background-color: rgba(60, 64, 67, 0.08);
+        color: var(--color-text-primary);
+      }
+
+      /* Botão "+ Item" abaixo da lista */
+      .btn-add-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: transparent;
+        border: none;
+        color: var(--color-text-secondary);
+        font-size: 1rem;
+        cursor: pointer;
+        padding: 8px 0;
+        margin-top: 8px;
+        width: fit-content;
+      }
+      .btn-add-item:hover {
+        color: var(--color-text-primary);
+      }
+      .btn-add-item svg {
+        fill: currentColor;
+      }
+
+      /* =========================================
+         5. Botão Salvar Flutuante (FAB)
+         ========================================= */
+      .fab-save {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: var(--color-primary);
+        color: white;
+        border: none;
+        box-shadow: var(--shadow-elevation-2);
+        cursor: pointer;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .fab-save:hover {
+        box-shadow: var(--shadow-elevation-4);
+        background-color: #5500d4;
+      }
+      .fab-save:active {
+        transform: scale(0.96);
+      }
+      .fab-save svg {
+        fill: currentColor;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="top-bar__start">
+        <a class="icon-btn" href="index.html" aria-label="Voltar para a lista">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-arrow-back"></use></svg>
+        </a>
+        <h1 class="top-bar__title">Nova Lista</h1>
+      </div>
+    </header>
+    <main>
+      <form id="todo-form" class="note-editor">
+        <label for="note-title" class="visually-hidden">Título da lista</label>
+        <input id="note-title" type="text" name="title" class="note-editor__input note-editor__title" placeholder="Título" autocomplete="off" autofocus />
+        <ul id="todo-list" class="todo-list"></ul>
+        <button type="button" id="btn-add-item" class="btn-add-item">
+          <svg width="20" height="20" aria-hidden="true"><use href="assets/icons.svg#icon-plus"></use></svg>
+          Adicionar item
+        </button>
+        <button type="submit" class="fab-save" aria-label="Salvar lista">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-check"></use></svg>
+        </button>
+      </form>
+    </main>
+    <template id="todo-item-template">
+      <li class="todo-item">
+        <input type="checkbox" class="todo-item__checkbox" aria-label="Marcar como concluído" />
+        <input type="text" class="todo-item__input" placeholder="Item da lista" autocomplete="off" />
+        <button type="button" class="todo-item__remove" aria-label="Remover item">
+          <svg width="18" height="18" aria-hidden="true"><use href="assets/icons.svg#icon-close"></use></svg>
+        </button>
+      </li>
+    </template>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const STORAGE_KEY = "memento_notes_v1";
+
+        const form = document.getElementById("todo-form");
+        const todoList = document.getElementById("todo-list");
+        const template = document.getElementById("todo-item-template");
+        const btnAdd = document.getElementById("btn-add-item");
+
+        function createTodoItem(text = "", checked = false, shouldFocus = false) {
+          const clone = template.content.cloneNode(true);
+          const li = clone.querySelector("li");
+          const input = li.querySelector(".todo-item__input");
+          const checkbox = li.querySelector(".todo-item__checkbox");
+          const removeBtn = li.querySelector(".todo-item__remove");
+
+          input.value = text;
+          checkbox.checked = checked;
+
+          input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              createTodoItem("", false, true);
+            }
+
+            if (e.key === "Backspace" && input.value === "") {
+              e.preventDefault();
+              focusPreviousItem(li);
+              li.remove();
+            }
+          });
+
+          removeBtn.addEventListener("click", () => {
+            li.remove();
+          });
+
+          todoList.appendChild(li);
+
+          if (shouldFocus) {
+            input.focus();
+          }
+        }
+
+        function focusPreviousItem(currentItem) {
+          const previousItem = currentItem.previousElementSibling;
+          if (previousItem) {
+            const input = previousItem.querySelector(".todo-item__input");
+            input.focus();
+
+            const len = input.value.length;
+            input.setSelectionRange(len, len);
+          }
+        }
+
+        createTodoItem();
+
+        btnAdd.addEventListener("click", () => {
+          createTodoItem("", false, true);
+        });
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const title = document.getElementById("note-title").value.trim();
+
+          const items = [];
+          const itemElements = todoList.querySelectorAll(".todo-item");
+
+          itemElements.forEach((el) => {
+            const text = el.querySelector(".todo-item__input").value.trim();
+            const done = el.querySelector(".todo-item__checkbox").checked;
+
+            if (text) {
+              items.push({ text, done });
+            }
+          });
+
+          if (!title && items.length === 0) {
+            alert("A lista está vazia. Adicione um título ou itens.");
+            document.getElementById("note-title").focus();
+            return;
+          }
+
+          const newNote = {
+            id: Date.now().toString(),
+            type: "todo",
+            title: title,
+            items: items,
+            updatedAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            isFavorite: false,
+          };
+
+          saveNote(newNote);
+          window.location.href = "index.html";
+        });
+
+        function saveNote(note) {
+          try {
+            const rawData = localStorage.getItem(STORAGE_KEY);
+            const notes = rawData ? JSON.parse(rawData) : [];
+            notes.push(note);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+          } catch (error) {
+            console.error(error);
+            alert("Erro ao salvar.");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,132 +1,496 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Memento - Anotações</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <script src="js/index.js" defer="defer"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      :root {
+        --color-primary: #6200ee;
+        --color-text-primary: #202124;
+        --color-text-secondary: #5f6368;
+        --color-border: #dadce0;
+        --color-bg-surface: #ffffff;
+        --color-bg-app: #f5f5f5;
+        --shadow-card: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+        --shadow-card-hover: 0 1px 3px rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+        --transition-std: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        --font-family: "Roboto", sans-serif;
+
+        --shadow-elevation-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        --shadow-elevation-4: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font-family);
+        background-color: var(--color-bg-app);
+        color: var(--color-text-primary);
+      }
+
+      main {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+        min-height: 100vh;
+        position: relative;
+      }
+      ul {
+        list-style: none;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 48px 0;
+        color: var(--color-text-secondary);
+        height: 60vh;
+      }
+      .empty-state[hidden] {
+        display: none !important;
+      }
+      .empty-state h2 {
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+        color: var(--color-text-primary);
+      }
+
+      .note-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 16px;
+        padding-bottom: 100px;
+      }
+      .note-grid[hidden] {
+        display: none;
+      }
+
+      .note-card {
+        display: flex;
+      }
+
+      .note-card__content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--color-bg-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 16px;
+        width: 100%;
+        transition: box-shadow 0.2s, transform 0.2s;
+        cursor: pointer;
+        min-height: 150px;
+      }
+
+      .note-card__content:hover {
+        box-shadow: var(--shadow-card-hover);
+        border-color: transparent;
+        transform: translateY(-2px);
+      }
+
+      .note-card__header h2 {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 12px;
+        line-height: 1.4;
+      }
+
+      .note-card__link {
+        color: var(--color-text-primary);
+      }
+
+      .note-card__link::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+      }
+
+      .note-card__summary {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 16px;
+        flex-grow: 1;
+        display: -webkit-box;
+
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.5;
+      }
+
+      .note-card__todo-list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 16px;
+        flex-grow: 1;
+      }
+
+      .note-card__todo-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.875rem;
+        color: var(--color-text-primary);
+      }
+
+      .note-card__todo-item svg {
+        min-width: 16px;
+        width: 16px;
+        height: 16px;
+        fill: var(--color-text-secondary);
+      }
+
+      .note-card__todo-item.is-done {
+        text-decoration: line-through;
+        color: var(--color-text-secondary);
+      }
+      .note-card__todo-item.is-done svg {
+        opacity: 0.5;
+      }
+
+      .note-card__todo-more {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        margin-top: 4px;
+        font-style: italic;
+      }
+
+      .note-card__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+      }
+
+      .note-card__btn-fav {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        color: var(--color-text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        position: relative;
+        z-index: 2;
+      }
+      .note-card__btn-fav:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: var(--color-text-primary);
+      }
+      .note-card__btn-fav.is-active {
+        color: #fbbc04;
+      }
+      .note-card__btn-fav.is-active svg {
+        fill: currentColor;
+      }
+
+      .fab-group {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .fab-menu {
+        list-style: none;
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 16px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px) scale(0.8);
+        transform-origin: bottom right;
+        transition: all var(--transition-std);
+      }
+
+      .fab-group.is-open .fab-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+
+      .fab-menu__item {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+      }
+
+      .fab-menu__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--color-bg-surface);
+        color: var(--color-text-secondary);
+        box-shadow: var(--shadow-elevation-2);
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .fab-menu__btn:hover {
+        background-color: #f1f3f4;
+        color: var(--color-text-primary);
+      }
+      .fab-menu__btn svg {
+        fill: currentColor;
+      }
+
+      .fab-menu__label {
+        background-color: var(--color-bg-surface);
+        color: var(--color-text-primary);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        margin-right: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(10px);
+        transition: opacity 0.2s, transform 0.2s;
+      }
+      .fab-group.is-open .fab-menu__label {
+        opacity: 1;
+        transform: translateX(0);
+        transition-delay: 0.1s;
+      }
+
+      .fab-trigger {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: var(--color-bg-surface);
+        color: var(--color-primary);
+        border: none;
+        box-shadow: var(--shadow-elevation-2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: box-shadow 0.2s, background-color 0.2s;
+      }
+      .fab-trigger:hover {
+        box-shadow: var(--shadow-elevation-4);
+        background-color: #f8f9fa;
+      }
+
+      .fab-trigger__icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        fill: currentColor;
+      }
+      .fab-trigger__icon--plus {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      .fab-trigger__icon--close {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(-90deg);
+      }
+
+      .fab-group.is-open .fab-trigger__icon--plus {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+      .fab-group.is-open .fab-trigger__icon--close {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+    </style>
   </head>
   <body>
-    <header class="header">
-      <h1>Anotações</h1>
-      <button class="button" type="button" aria-controls="main-sidebar" aria-expanded="false" aria-label="Menu principal">
-        <svg width="24" height="24" aria-hidden="true">
-          <use href="icons.svg#icon-menu"></use>
-        </svg>
-      </button>
-      <div class="toolbar" role="toolbar" aria-label="Ações principais">
-        <button class="button" type="button" aria-controls="search-box" aria-expanded="false" aria-label="Pesquisar">
-          <svg width="24" height="24" aria-hidden="true">
-            <use href="icons.svg#icon-search"></use>
-          </svg>
+    <header class="top-bar">
+      <div class="top-bar__start">
+        <button id="btn-open-menu" class="icon-btn" type="button" aria-controls="main-menu" aria-expanded="false" aria-label="Abrir menu principal">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg>
         </button>
-        <button class="button" type="button" aria-controls="sort-dialog" aria-expanded="false" aria-label="Organizar">
-          <svg width="24" height="24" aria-hidden="true">
-            <use href="icons.svg#icon-sort"></use>
-          </svg>
-        </button>
+        <h1 class="top-bar__title">Anotações</h1>
       </div>
-      <div id="search-box" hidden="hidden">
-        <form role="search">
-          <label for="search">Pesquisar</label>
-          <input id="search" type="search" placeholder="Digite para pesquisar..." aria-controls="notes-list" />
-        </form>
-        <button type="button" aria-label="Fechar pesquisa">
-          <svg width="24" height="24" aria-hidden="true">
-            <use href="icons.svg#icon-close"></use>
-          </svg>
+      <form id="search-bar" class="search-bar" id="search-panel" role="search" hidden="">
+        <label class="visually-hidden" for="search-field">Pesquisar anotações</label>
+        <button id="btn-close-search" class="icon-btn search-bar__btn-back" type="button" aria-label="Fechar pesquisa">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-arrow-back"></use></svg>
+        </button>
+        <input class="search-bar__input" id="search-field" type="search" name="search" aria-controls="note-list" placeholder="Digite para pesquisar..." />
+      </form>
+      <div class="top-bar__actions" role="toolbar" aria-label="Ações principais">
+        <button id="btn-open-search" class="icon-btn" type="button" aria-controls="search-panel" aria-expanded="false" aria-label="Pesquisar">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-find"></use></svg>
+        </button>
+        <button id="btn-open-sort" class="icon-btn" type="button" aria-controls="sort-dialog" aria-haspopup="dialog" aria-label="Organizar">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-sort"></use></svg>
         </button>
       </div>
     </header>
-    <nav id="main-sidebar" hidden="hidden">
-      <a href="#">Memento</a>
+    <nav id="main-menu" class="main-nav" aria-label="Principal">
+      <header class="main-nav__header">
+        <strong class="main-nav__title">Memento</strong>
+        <button id="btn-close-menu" class="icon-btn" type="button" aria-controls="main-menu" aria-label="Fechar menu principal">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-close"></use></svg>
+        </button>
+      </header>
       <ul>
         <li>
-          <a href="#">
-            <svg width="24" height="24" aria-hidden="true">
-              <use href="icons.svg#icon-note-stack"></use>
-            </svg>
+          <a href="#" aria-current="page">
+            <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-home"></use></svg>
             Anotações
           </a>
         </li>
         <li>
           <a href="#">
-            <svg width="24" height="24" aria-hidden="true">
-              <use href="icons.svg#icon-star"></use>
-            </svg>
+            <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-star"></use></svg>
             Favoritos
           </a>
         </li>
         <li>
           <a href="#">
-            <svg width="24" height="24" aria-hidden="true">
-              <use href="icons.svg#icon-alarm"></use>
-            </svg>
-            Lembretes
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <svg width="24" height="24" aria-hidden="true">
-              <use href="icons.svg#icon-label"></use>
-            </svg>
+            <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-label"></use></svg>
             Etiquetas
           </a>
         </li>
         <li>
           <a href="#">
-            <svg width="24" height="24" aria-hidden="true">
-              <use href="icons.svg#icon-delete"></use>
-            </svg>
+            <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-alarm"></use></svg>
+            Lembretes
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-trash"></use></svg>
             Excluídos
           </a>
         </li>
         <li>
           <a href="#">
-            <svg width="24" height="24" aria-hidden="true">
-              <use href="icons.svg#icon-settings"></use>
-            </svg>
+            <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-settings"></use></svg>
             Configurações
           </a>
         </li>
       </ul>
     </nav>
     <main>
-      <ul class="notes" id="notes-list" aria-live="polite"></ul>
-      <template id="note-template">
-        <li class="note-card">
-          <a class="note-card__link">
-            <h3 class="note-card__title"></h3>
-            <p class="note-card__content"></p>
-          </a>
-        </li>
-      </template>
-      <a class="fixed-button" href="add.html" aria-label="Adicionar anotação">
-        <svg width="24" height="24" aria-hidden="true">
-          <use href="icons.svg#icon-add"></use>
-        </svg>
-      </a>
+      <section id="empty-state" class="empty-state" aria-labelledby="empty-state-title">
+        <svg class="empty-state__icon" width="48" height="48" aria-hidden="true"><use href="assets/icons.svg#icon-draft"></use></svg>
+        <h2 id="empty-state-title" class="empty-state__title">Nenhuma anotação ainda</h2>
+        <p class="empty-state__text">Comece a organizar suas ideias. Crie sua primeira anotação.</p>
+        <a class="empty-state__cta" href="#">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-plus"></use></svg>
+          Criar anotação
+        </a>
+      </section>
+      <ul id="note-list" class="note-grid" aria-live="polite" aria-atomic="true"></ul>
+      <div id="fab-group" class="fab-group">
+        <ul id="create-menu" class="fab-menu" hidden="">
+          <li class="fab-menu__item">
+            <span class="fab-menu__label" aria-hidden="true">Texto</span>
+            <a class="fab-menu__btn" href="new-note.html" aria-label="Criar anotação simples">
+              <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-text"></use></svg>
+            </a>
+          </li>
+          <li class="fab-menu__item">
+            <span class="fab-menu__label" aria-hidden="true">Lista</span>
+            <a class="fab-menu__btn" href="new-todo.html" aria-label="Criar lista de tarefas">
+              <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-checklist"></use></svg>
+            </a>
+          </li>
+        </ul>
+        <button id="fab-trigger" class="fab-trigger" type="button" aria-controls="create-menu" aria-expanded="false" aria-haspopup="menu" aria-label="Criar anotação">
+          <svg class="fab-trigger__icon fab-trigger__icon--plus" width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-plus"></use></svg>
+          <svg class="fab-trigger__icon fab-trigger__icon--close" width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-close"></use></svg>
+        </button>
+      </div>
     </main>
-    <div id="sort-dialog" role="dialog" aria-modal="true" aria-labelledby="sort-dialog-title" hidden="hidden">
-      <h2 id="sort-dialog-title">Organizar Anotações</h2>
-      <form>
+    <div id="nav-overlay" class="nav-overlay" aria-hidden="true"></div>
+    <template id="note-template">
+      <li class="note-card">
+        <article class="note-card__content">
+          <header class="note-card__header">
+            <h2><a href="#" class="note-card__link" data-link></a></h2>
+          </header>
+          <p class="note-card__summary" data-content></p>
+          <footer class="note-card__footer">
+            <time datetime="" data-date></time>
+            <button type="button" class="note-card__btn-fav" aria-label="Favoritar" data-action="favorite">
+              <svg width="20" height="20" aria-hidden="true"><use href="assets/icons.svg#icon-star"></use></svg>
+            </button>
+          </footer>
+        </article>
+      </li>
+    </template>
+    <template id="todo-template">
+      <li class="note-card">
+        <article class="note-card__content">
+          <header class="note-card__header">
+            <h2><a href="#" class="note-card__link" data-link></a></h2>
+          </header>
+          <ul class="note-card__todo-list" data-todo-list></ul>
+          <footer class="note-card__footer">
+            <time datetime="" data-date></time>
+            <button type="button" class="note-card__btn-fav" aria-label="Favoritar" data-action="favorite">
+              <svg width="20" height="20" aria-hidden="true"><use href="assets/icons.svg#icon-star"></use></svg>
+            </button>
+          </footer>
+        </article>
+      </li>
+    </template>
+    <dialog id="sort-dialog" aria-labelledby="sort-title">
+      <form method="dialog">
+        <header>
+          <h2 id="sort-title">Organizar</h2>
+          <button type="submit" value="cancel" formnovalidate="" aria-label="Fechar diálogo">
+            <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-close"></use></svg>
+          </button>
+        </header>
         <fieldset>
-          <legend>Organizar por:</legend>
+          <legend>Organizar por</legend>
           <div>
-            <input id="sort-modified-date" type="radio" name="sort" value="modified-date" checked="checked" />
+            <input id="sort-modified-date" type="radio" name="sort-option" value="modified-date" checked="checked" />
             <label for="sort-modified-date">Data de modificação</label>
           </div>
           <div>
-            <input id="sort-created-date" type="radio" name="sort" value="created-date" />
+            <input id="sort-created-date" type="radio" name="sort-option" value="created-date" />
             <label for="sort-created-date">Data de criação</label>
           </div>
           <div>
-            <input id="sort-reminder-date" type="radio" name="sort" value="reminder-date" />
-            <label for="sort-reminder-date">Data de lembrete</label>
-          </div>
-          <div>
-            <input id="sort-title" type="radio" name="sort" value="title" />
+            <input id="sort-title" type="radio" name="sort-option" value="title" />
             <label for="sort-title">Título</label>
           </div>
         </fieldset>
@@ -135,17 +499,260 @@
           <label for="sort-favorites">Favoritos primeiro</label>
         </div>
         <fieldset>
-          <legend>Sentido</legend>
+          <legend>Ordem</legend>
           <div>
-            <input id="sort-ascending" type="radio" name="sort-order" value="ascending" checked="checked" />
-            <label for="sort-ascending">Crescente</label>
+            <input id="order-ascending" type="radio" name="sort-order" value="ascending" checked="checked" />
+            <label for="order-ascending">Crescente</label>
           </div>
           <div>
-            <input id="sort-descending" type="radio" name="sort-order" value="descending" />
-            <label for="sort-descending">Decrescente</label>
+            <input id="order-descending" type="radio" name="sort-order" value="descending" />
+            <label for="order-descending">Decrescente</label>
           </div>
         </fieldset>
+        <footer>
+          <button type="submit" value="apply">Aplicar</button>
+        </footer>
       </form>
-    </div>
+    </dialog>
+    <script>
+      const app = {
+        STORAGE_KEY: "memento_notes_v1",
+
+        init() {
+          this.cacheDom();
+          this.bindEvents();
+          this.loadNotes();
+        },
+
+        cacheDom() {
+          this.dom = {
+            emptyState: document.getElementById("empty-state"),
+            noteList: document.getElementById("note-list"),
+            noteTemplate: document.getElementById("note-template"),
+            todoTemplate: document.getElementById("todo-template"), // Novo template
+
+            fabGroup: document.getElementById("fab-group"),
+            fabTrigger: document.getElementById("fab-trigger"),
+            fabMenu: document.getElementById("create-menu"),
+          };
+        },
+
+        bindEvents() {
+          this.dom.fabTrigger.addEventListener("click", () => this.toggleFabMenu());
+          document.addEventListener("click", (e) => {
+            if (this.dom.fabGroup.classList.contains("is-open") && !this.dom.fabGroup.contains(e.target)) {
+              this.toggleFabMenu();
+            }
+          });
+        },
+
+        toggleFabMenu() {
+          const isExpanded = this.dom.fabTrigger.getAttribute("aria-expanded") === "true";
+          const newState = !isExpanded;
+
+          this.dom.fabTrigger.setAttribute("aria-expanded", newState);
+          if (newState) {
+            this.dom.fabGroup.classList.add("is-open");
+            this.dom.fabMenu.removeAttribute("hidden");
+          } else {
+            this.dom.fabGroup.classList.remove("is-open");
+            setTimeout(() => {
+              if (!this.dom.fabGroup.classList.contains("is-open")) this.dom.fabMenu.setAttribute("hidden", "");
+            }, 300);
+          }
+        },
+
+        loadNotes() {
+          const rawData = localStorage.getItem(this.STORAGE_KEY);
+          const notes = rawData ? JSON.parse(rawData) : [];
+
+          if (notes.length === 0) {
+            this.dom.emptyState.removeAttribute("hidden");
+            this.dom.noteList.setAttribute("hidden", "");
+          } else {
+            this.dom.emptyState.setAttribute("hidden", "");
+            this.dom.noteList.removeAttribute("hidden");
+            this.renderNotes(notes);
+          }
+        },
+
+        renderNotes(notes) {
+          this.dom.noteList.innerHTML = "";
+
+          const sortedNotes = notes.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+          const fragment = document.createDocumentFragment();
+
+          sortedNotes.forEach((note) => {
+            const card = this.createNoteCard(note);
+            fragment.appendChild(card);
+          });
+
+          this.dom.noteList.appendChild(fragment);
+        },
+
+        createNoteCard(note) {
+          let clone;
+
+          if (note.type === "todo") {
+            clone = this.dom.todoTemplate.content.cloneNode(true);
+            this.fillTodoCard(clone, note);
+          } else {
+            clone = this.dom.noteTemplate.content.cloneNode(true);
+            this.fillTextCard(clone, note);
+          }
+
+          const link = clone.querySelector("[data-link]");
+          link.textContent = note.title || (note.type === "todo" ? "Lista sem título" : "Sem título");
+
+          const page = note.type === "todo" ? "todo.html" : "note.html";
+          link.href = `${page}?id=${note.id}`;
+
+          const dateEl = clone.querySelector("[data-date]");
+          const dateObj = new Date(note.updatedAt);
+          dateEl.dateTime = note.updatedAt;
+          dateEl.textContent = new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "short" }).format(dateObj);
+
+          const favBtn = clone.querySelector('[data-action="favorite"]');
+          if (note.isFavorite) {
+            favBtn.classList.add("is-active");
+            favBtn.querySelector("use").setAttribute("href", "assets/icons.svg#icon-star-filled");
+          }
+
+          return clone;
+        },
+
+        fillTextCard(clone, note) {
+          const content = clone.querySelector("[data-content]");
+          content.textContent = note.content || "Sem conteúdo adicional";
+        },
+
+        fillTodoCard(clone, note) {
+          const listContainer = clone.querySelector("[data-todo-list]");
+
+          const previewItems = note.items.slice(0, 3);
+
+          previewItems.forEach((item) => {
+            const li = document.createElement("li");
+            li.className = `note-card__todo-item ${item.done ? "is-done" : ""}`;
+
+            const iconId = item.done ? "icon-check" : "icon-checkbox-blank";
+
+            let svgIcon;
+            if (item.done) {
+              svgIcon = `<svg aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
+            } else {
+              svgIcon = `<svg aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>`;
+            }
+
+            li.innerHTML = `
+              ${svgIcon}
+              <span class="truncate">${item.text}</span>
+            `;
+            listContainer.appendChild(li);
+          });
+
+          if (note.items.length > 3) {
+            const more = document.createElement("li");
+            more.className = "note-card__todo-more";
+            more.textContent = `+ ${note.items.length - 3} itens`;
+            listContainer.appendChild(more);
+          }
+
+          if (note.items.length === 0) {
+            const empty = document.createElement("li");
+            empty.className = "note-card__todo-more";
+            empty.textContent = "Lista vazia";
+            listContainer.appendChild(empty);
+          }
+        },
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const refs = {
+          body: document.body,
+
+          btnOpenMenu: document.getElementById("btn-open-menu"),
+          btnCloseMenu: document.getElementById("btn-close-menu"),
+          menu: document.getElementById("main-menu"),
+          overlay: document.getElementById("nav-overlay"),
+
+          btnOpenSearch: document.getElementById("btn-open-search"),
+          btnCloseSearch: document.getElementById("btn-close-search"),
+
+          searchBar: document.getElementById("search-bar"),
+          searchInput: document.getElementById("search-field"),
+
+          btnOpenSort: document.getElementById("btn-open-sort"),
+          dialogSort: document.getElementById("sort-dialog"),
+        };
+
+        function toggleMenu(isOpen) {
+          refs.menu.classList.toggle("is-open", isOpen);
+          refs.overlay.classList.toggle("is-visible", isOpen);
+
+          refs.body.classList.toggle("no-scroll", isOpen);
+
+          refs.btnOpenMenu.setAttribute("aria-expanded", isOpen);
+          refs.overlay.setAttribute("aria-hidden", !isOpen);
+        }
+
+        refs.btnOpenMenu.addEventListener("click", () => toggleMenu(true));
+        refs.btnCloseMenu.addEventListener("click", () => toggleMenu(false));
+        refs.overlay.addEventListener("click", () => toggleMenu(false));
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && refs.menu.classList.contains("is-open")) {
+            toggleMenu(false);
+          }
+        });
+
+        function toggleSearch(isOpen) {
+          if (isOpen) {
+            refs.searchBar.removeAttribute("hidden");
+            refs.searchInput.focus();
+            refs.btnOpenSearch.setAttribute("aria-expanded", "true");
+          } else {
+            refs.searchBar.setAttribute("hidden", "");
+            refs.searchInput.value = "";
+            refs.btnOpenSearch.setAttribute("aria-expanded", "false");
+
+            refs.btnOpenSearch.focus();
+          }
+        }
+
+        refs.btnOpenSearch.addEventListener("click", () => toggleSearch(true));
+        refs.btnCloseSearch.addEventListener("click", () => toggleSearch(false));
+
+        refs.btnOpenSort.addEventListener("click", () => {
+          if (typeof refs.dialogSort.showModal === "function") {
+            refs.dialogSort.showModal();
+          } else {
+            alert("Seu navegador não suporta a API de Dialog nativa.");
+          }
+        });
+
+        refs.dialogSort.addEventListener("close", () => {
+          console.log(`Diálogo fechado com ação: ${refs.dialogSort.returnValue}`);
+
+          if (refs.dialogSort.returnValue === "apply") {
+            console.log("Aplicando ordenação...");
+
+            const formData = new FormData(refs.dialogSort.querySelector("form"));
+            console.log("Opção:", formData.get("sort-option"));
+            console.log("Ordem:", formData.get("sort-order"));
+          }
+        });
+
+        refs.dialogSort.addEventListener("click", (event) => {
+          const rect = refs.dialogSort.getBoundingClientRect();
+          const isInDialog = rect.top <= event.clientY && event.clientY <= rect.top + rect.height && rect.left <= event.clientX && event.clientX <= rect.left + rect.width;
+          if (!isInDialog) {
+            refs.dialogSort.close("cancel");
+          }
+        });
+
+        app.init();
+      });
+    </script>
   </body>
 </html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nova Anotação - Memento</title>
+    <style>
+      :root {
+        --color-primary: #6200ee;
+        --color-bg-app: #ffffff;
+        --color-bg-surface: #ffffff;
+        --color-text-primary: #202124;
+        --color-text-secondary: #5f6368;
+        --color-text-placeholder: #9aa0a6;
+        --color-border: #dadce0;
+        --font-family: "Roboto", sans-serif;
+        --header-height: 64px;
+        --shadow-elevation-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        --shadow-elevation-4: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-family);
+        background-color: var(--color-bg-app);
+        color: var(--color-text-primary);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        height: var(--header-height);
+        padding: 0 8px;
+        background-color: var(--color-bg-surface);
+
+        flex-shrink: 0;
+      }
+
+      .top-bar__start {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .top-bar__title {
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: var(--color-text-primary);
+        margin-left: 8px;
+      }
+
+      .icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: none;
+        background-color: transparent;
+        color: var(--color-text-secondary);
+        border-radius: 50%;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.2s;
+      }
+      .icon-btn:hover {
+        background-color: rgba(60, 64, 67, 0.08);
+        color: var(--color-text-primary);
+      }
+      .icon-btn svg {
+        fill: currentColor;
+      }
+
+      main {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        max-width: 800px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 16px 24px;
+        position: relative;
+      }
+
+      .note-editor {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        gap: 16px;
+      }
+
+      .note-editor__input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        outline: none;
+        color: var(--color-text-primary);
+        font-family: inherit;
+      }
+
+      .note-editor__input::placeholder {
+        color: var(--color-text-placeholder);
+      }
+
+      .note-editor__title {
+        font-size: 1.5rem;
+        font-weight: 500;
+        line-height: 1.2;
+        padding: 8px 0;
+      }
+
+      .note-editor__content {
+        flex-grow: 1;
+        font-size: 1rem;
+        line-height: 1.6;
+        resize: none;
+      }
+
+      .fab-save {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: var(--color-primary);
+        color: white;
+        border: none;
+        box-shadow: var(--shadow-elevation-2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .fab-save:hover {
+        box-shadow: var(--shadow-elevation-4);
+        background-color: #5500d4;
+      }
+
+      .fab-save:active {
+        transform: scale(0.96);
+      }
+
+      .fab-save svg {
+        fill: currentColor;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="top-bar__start">
+        <a class="icon-btn" href="index.html" aria-label="Voltar para a lista">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-arrow-back"></use></svg>
+        </a>
+        <h1 class="top-bar__title">Nova Anotação</h1>
+      </div>
+    </header>
+    <main>
+      <form id="note-form" class="note-editor">
+        <label for="note-title" class="visually-hidden">Título da anotação</label>
+        <input id="note-title" type="text" name="title" class="note-editor__input note-editor__title" placeholder="Título" autocomplete="off" autofocus />
+
+        <label for="note-content" class="visually-hidden">Conteúdo da anotação</label>
+        <textarea id="note-content" name="content" class="note-editor__input note-editor__content" placeholder="Comece a escrever..."></textarea>
+        <button type="submit" class="fab-save" aria-label="Salvar anotação">
+          <svg width="24" height="24" aria-hidden="true"><use href="assets/icons.svg#icon-check"></use></svg>
+        </button>
+      </form>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const STORAGE_KEY = "memento_notes_v1";
+        const form = document.getElementById("note-form");
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const formData = new FormData(form);
+          const title = formData.get("title").trim();
+          const content = formData.get("content").trim();
+
+          if (!title && !content) {
+            alert("Por favor, escreva um título ou algum conteúdo antes de salvar.");
+
+            document.getElementById("note-title").focus();
+            return;
+          }
+
+          const newNote = {
+            id: Date.now().toString(),
+            title: title,
+            content: content,
+            updatedAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            isFavorite: false,
+          };
+
+          saveNote(newNote);
+
+          window.location.href = "index.html";
+        });
+
+        function saveNote(note) {
+          try {
+            const rawData = localStorage.getItem(STORAGE_KEY);
+            const notes = rawData ? JSON.parse(rawData) : [];
+
+            notes.push(note);
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+          } catch (error) {
+            console.error("Erro ao salvar nota:", error);
+            alert("Ocorreu um erro ao salvar sua anotação. Verifique se o armazenamento local está cheio.");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
